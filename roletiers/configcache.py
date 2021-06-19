@@ -1,3 +1,6 @@
+from copy import copy
+
+
 class ConfigCache:
     def __init__(self):
         self.cache: dict = {}
@@ -28,19 +31,19 @@ class GuildCache(ConfigCache):
         if self.cache.get(guild_id):
             self.cache[guild_id][key] = value
         else:
-            self.cache[guild_id] = self.defaults
+            self.cache[guild_id] = copy(self.defaults)
             self.cache[guild_id].update({key: value})
         return self.cache[guild_id]
 
     def append(self, guild_id: int, key: str, value, check: bool = False):
         if not self.cache.get(guild_id):
-            self.cache[guild_id] = self.defaults
+            self.cache[guild_id] = copy(self.defaults)
         if not check or value not in self.cache[guild_id][key]:
             self.cache[guild_id][key].append(value)
 
     def remove(self, guild_id: int, key: str, value, check: bool = False):
         if not self.cache.get(guild_id):
-            self.cache[guild_id] = self.defaults
+            self.cache[guild_id] = copy(self.defaults)
         if not check or value in self.cache[guild_id][key]:
             self.cache[guild_id][key].remove(value)
 
@@ -69,7 +72,7 @@ class MemberCache(ConfigCache):
         if self.cache[guild_id].get(member_id):
             self.cache[guild_id][member_id][key] = value
         else:
-            self.cache[guild_id][member_id] = self.defaults
+            self.cache[guild_id][member_id] = copy(self.defaults)
             self.cache[guild_id][member_id].update({key: value})
         return self.cache[guild_id][member_id]
 
@@ -77,7 +80,7 @@ class MemberCache(ConfigCache):
         if not self.cache.get(guild_id):
             self.cache[guild_id] = {}
         if not self.cache[guild_id].get(member_id):
-            self.cache[guild_id][member_id] = self.defaults
+            self.cache[guild_id][member_id] = copy(self.defaults)
         self.cache[guild_id][member_id][key] += value
         return self.cache[guild_id][member_id]
 
