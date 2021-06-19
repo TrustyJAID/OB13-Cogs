@@ -205,6 +205,14 @@ class RoleTiers(commands.Cog):
         seconds = int(await self._seconds_since(user.joined_at))
         return await ctx.maybe_send_embed(f"**Messages Sent:** {messages}\n**Time Since Join:** {humanize_timedelta(timedelta=(timedelta(seconds=(seconds - seconds%3600)))) or '< 1 hour'}")
 
+    @_role_tiers.command(name="resetusers", hidden=True)
+    async def _reset_users(self, ctx: commands.Context, enter_true_to_confirm: bool):
+        if not enter_true_to_confirm:
+            return await ctx.send("Please enter `true` to confirm this action!")
+        await self.config.clear_all_members(guild=ctx.guild)
+        self.member_data.initialize(await self.config.all_members(), self.default_member)
+        return await ctx.tick()
+
     @commands.bot_has_permissions(embed_links=True)
     @_role_tiers.command(name="view")
     async def _view(self, ctx: commands.Context):
