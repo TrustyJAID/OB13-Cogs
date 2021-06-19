@@ -339,7 +339,7 @@ class RoleTiers(commands.Cog):
 
                 # Remove roles from prior tiers
                 if new_tier and new_tier["remove"] and (member_tier_roles := [role for role in member_tier_roles if role < guild.me.top_role]):
-                    await member.remove_roles(member_tier_roles, reason="RoleTiers: removing roles from prior tiers")
+                    await member.remove_roles(*member_tier_roles, reason="RoleTiers: removing roles from prior tiers")
 
     @_tier_checker.before_loop
     async def _before_checker(self):
