@@ -189,7 +189,7 @@ class RoleTiers(commands.Cog):
         """View a user's RoleTiers stats."""
         messages = self.member_data.get(ctx.guild.id, user.id, "messages")
         seconds = int(await self._seconds_since(user.joined_at))
-        return await ctx.maybe_send_embed(f"**Messages Sent:** {messages}\n**Time Since Join:** {humanize_timedelta(timedelta=(timedelta(seconds=(seconds - seconds%3600))))}")
+        return await ctx.maybe_send_embed(f"**Messages Sent:** {messages}\n**Time Since Join:** {humanize_timedelta(timedelta=(timedelta(seconds=(seconds - seconds%3600)))) or '< 1 hour'}")
 
     @commands.bot_has_permissions(embed_links=True)
     @_role_tiers.command(name="view")

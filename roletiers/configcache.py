@@ -29,7 +29,7 @@ class GuildCache(ConfigCache):
             self.cache[guild_id][key] = value
         else:
             self.cache[guild_id] = self.defaults
-            self.cache[guild_id].update(key, value)
+            self.cache[guild_id].update({key: value})
         return self.cache[guild_id]
 
     def append(self, guild_id: int, key: str, value, check: bool = False):
@@ -70,7 +70,7 @@ class MemberCache(ConfigCache):
             self.cache[guild_id][member_id][key] = value
         else:
             self.cache[guild_id][member_id] = self.defaults
-            self.cache[guild_id][member_id].update(key, value)
+            self.cache[guild_id][member_id].update({key: value})
         return self.cache[guild_id][member_id]
 
     def increment(self, guild_id: int, member_id: int, key: str, value):
