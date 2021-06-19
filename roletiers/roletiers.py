@@ -100,6 +100,20 @@ class RoleTiers(commands.Cog):
         if self.guild_settings.get(message.guild.id, "count_commands"):
             await self._message_listener(message)
 
+    @commands.Cog.listener("on_member_remove")
+    async def _member_leave_listener(self, member: discord.Member):
+
+        # Ignore these messages
+        if (
+                await self.bot.cog_disabled_in_guild(self, member.guild) or  # Cog disabled in guild
+                not self.guild_settings.get(member.guild.id, "toggle") or  # RoleTiers toggled off
+                member.bot or  # Member is a bot
+                member.id in self.guild_settings.get(member.guild.id, "ignore")  # Member is ignored user
+        ):
+            return
+
+        self.member_data.set(member.guild.id, member.id, "messages", 0)
+
     @commands.guild_only()
     @commands.bot_has_permissions(manage_roles=True)
     @commands.admin_or_permissions(administrator=True)
@@ -174,7 +188,7 @@ class RoleTiers(commands.Cog):
         """
         Remove a tier from the server RoleTiers.
 
-        Enter the tier number to remove (see `[p]roletiers view`)
+        Enter the tier number/position to remove (see `[p]roletiers view`)
         """
 
         async with self.config.guild(ctx.guild).tiers() as guild_tiers:
@@ -294,19 +308,20 @@ class RoleTiers(commands.Cog):
                 if not (member := guild.get_member(member_id)):
                     continue
 
-                member_roles, new_tier = [], None
+                member_roles = [r.id for r in member.roles]
+                member_tier_roles, new_tier = [], None
 
                 # Check each tier
                 for tier in reversed(guild_tiers):
 
                     # Member currently in tier
-                    if tier["role"] in member.roles:
-                        member_roles.append(tier["role"])
+                    if tier["role"].id in member_roles:
+                        member_tier_roles.append(tier["role"])
 
                     # Check if member qualifies for tier
                     elif (
                             not new_tier and  # Does not already have a newly qualified higher tier
-                            not member_roles and  # Member is not already in a higher tier
+                            not member_tier_roles and  # Member is not already in a higher tier
                             (
                                     (not tier["hours"]) or
                                     ((await self._seconds_since(member.joined_at)) / 3600 >= tier["hours"])
@@ -323,8 +338,8 @@ class RoleTiers(commands.Cog):
                     await member.add_roles(new_tier["role"], reason="RoleTiers: member reached new tier")
 
                 # Remove roles from prior tiers
-                if new_tier and new_tier["remove"] and (member_roles := [role for role in member_roles if role < guild.me.top_role]):
-                    await member.remove_roles(member_roles, reason="RoleTiers: removing roles from prior tiers")
+                if new_tier and new_tier["remove"] and (member_tier_roles := [role for role in member_tier_roles if role < guild.me.top_role]):
+                    await member.remove_roles(member_tier_roles, reason="RoleTiers: removing roles from prior tiers")
 
     @_tier_checker.before_loop
     async def _before_checker(self):
