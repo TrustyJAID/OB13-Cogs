@@ -86,7 +86,7 @@ class PrivateRooms(commands.Cog):
                     if log_channel and sys['lobby'] == before.channel.id and after.channel.id in active_vcs:
                         await self._send_log(
                             channel=log_channel,
-                            text=f"{member.mention} joined `{after.channel.name}`",
+                            text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
                             color=discord.Color.magenta(),
                             embed_links=embed_links,
                         )
@@ -181,7 +181,7 @@ class PrivateRooms(commands.Cog):
                                 if log_channel:
                                     await self._send_log(
                                         channel=log_channel,
-                                        text=f"{member.mention} left `{before.channel.name}`, channel removed",
+                                        text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
                                         color=discord.Color.dark_teal(),
                                         embed_links=embed_links,
                                     )
@@ -231,7 +231,7 @@ class PrivateRooms(commands.Cog):
                         if log_channel:
                             await self._send_log(
                                 channel=log_channel,
-                                text=f"{member.mention} joined {before.channel.mention} and created `{private_vc.name}`",
+                                text=f"{member.mention} `{member.id}` joined {before.channel.mention} and created `{private_vc.name}`",
                                 color=discord.Color.teal(),
                                 embed_links=embed_links,
                             )
@@ -256,7 +256,7 @@ class PrivateRooms(commands.Cog):
     async def _send_log(channel: discord.TextChannel, text: str, color: discord.Color, embed_links: bool):
         if embed_links:
             return await channel.send(embed=discord.Embed(
-                timestamp=datetime.utcnow(),
+                # timestamp=datetime.utcnow(),
                 color=color,
                 description=text
             ))
