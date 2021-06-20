@@ -82,14 +82,16 @@ class PublicRooms(commands.Cog):
                     active = [x[0] for x in sys['active']]
 
                     # Member joined an active PublicRoom
-                    log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                    if log_channel:
-                        await self._send_log(
-                            channel=log_channel,
-                            text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
-                            color=discord.Color.magenta(),
-                            embed_links=embed_links
-                        )
+                    if before.channel.id != after.channel.id:
+                        # only log if the channel changes nothing else.
+                        log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
+                        if log_channel:
+                            await self._send_log(
+                                channel=log_channel,
+                                text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
+                                color=discord.Color.blurple(),
+                                embed_links=embed_links
+                            )
 
                     # Member left a PublicRoom
                     if before.channel.id in active and before.channel.id != after.channel.id:
@@ -172,7 +174,7 @@ class PublicRooms(commands.Cog):
                                 await self._send_log(
                                     channel=log_channel,
                                     text=f"{member.mention} `{member.id}` left `{before.channel.name}`, renamed to {public_vc.name}",
-                                    color=discord.Color.teal(),
+                                    color=discord.Color.red(),
                                     embed_links=embed_links,
                                 )
 
@@ -273,7 +275,7 @@ class PublicRooms(commands.Cog):
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` joined `{after.channel.name}`",
-                                color=discord.Color.magenta(),
+                                color=discord.Color.dark_teal(),
                                 embed_links=embed_links,
                             )
 
