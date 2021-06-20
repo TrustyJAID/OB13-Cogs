@@ -83,10 +83,10 @@ class PublicRooms(commands.Cog):
 
                     # Member joined an active PublicRoom
                     log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                    if log_channel and before.channel.id not in active and after.channel.id in active:
+                    if log_channel:
                         await self._send_log(
                             channel=log_channel,
-                            text=f"{member.mention} joined `{after.channel.name}`",
+                            text=f"{member.mention} moved from `{before.channel.name}` to `{after.channel.name}`",
                             color=discord.Color.magenta(),
                             embed_links=embed_links
                         )
