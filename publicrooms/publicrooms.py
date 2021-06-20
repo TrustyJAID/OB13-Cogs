@@ -71,6 +71,7 @@ class PublicRooms(commands.Cog):
 
         leftroom = False
         joinedroom = False
+        posted_logs = False
 
         # Moved channels
         if before.channel and after.channel:
@@ -85,13 +86,14 @@ class PublicRooms(commands.Cog):
                     if before.channel.id != after.channel.id:
                         # only log if the channel changes nothing else.
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                        if log_channel:
+                        if log_channel and not posted_logs:
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
                                 color=discord.Color.blurple(),
                                 embed_links=embed_links
                             )
+                            posted_logs = True
 
                     # Member left a PublicRoom
                     if before.channel.id in active and before.channel.id != after.channel.id:
