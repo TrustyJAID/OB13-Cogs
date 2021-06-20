@@ -86,7 +86,7 @@ class PublicRooms(commands.Cog):
                     if log_channel:
                         await self._send_log(
                             channel=log_channel,
-                            text=f"{member.mention} moved from `{before.channel.name}` to `{after.channel.name}`",
+                            text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
                             color=discord.Color.magenta(),
                             embed_links=embed_links
                         )
@@ -125,7 +125,7 @@ class PublicRooms(commands.Cog):
                             if log_channel:
                                 await self._send_log(
                                     channel=log_channel,
-                                    text=f"{member.mention} left `{before.channel.name}`, channel removed",
+                                    text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
                                     color=discord.Color.dark_teal(),
                                     embed_links=embed_links,
                                 )
@@ -171,7 +171,7 @@ class PublicRooms(commands.Cog):
                             if log_channel:
                                 await self._send_log(
                                     channel=log_channel,
-                                    text=f"{member.mention} left `{before.channel.name}`, renamed to {public_vc.name}",
+                                    text=f"{member.mention} `{member.id}` left `{before.channel.name}`, renamed to {public_vc.name}",
                                     color=discord.Color.teal(),
                                     embed_links=embed_links,
                                 )
@@ -183,7 +183,7 @@ class PublicRooms(commands.Cog):
                         if log_channel:
                             await self._send_log(
                                 channel=log_channel,
-                                text=f"{member.mention} left `{before.channel.name}`",
+                                text=f"{member.mention} `{member.id}` left `{before.channel.name}`",
                                 color=discord.Color.magenta(),
                                 embed_links=embed_links,
                             )
@@ -256,7 +256,7 @@ class PublicRooms(commands.Cog):
                         if log_channel:
                             await self._send_log(
                                 channel=log_channel,
-                                text=f"{member.mention} created `{public_vc.name}`",
+                                text=f"{member.mention} `{member.id}` created `{public_vc.name}`",
                                 color=discord.Color.teal(),
                                 embed_links=embed_links,
                             )
@@ -272,7 +272,7 @@ class PublicRooms(commands.Cog):
                         if log_channel:
                             await self._send_log(
                                 channel=log_channel,
-                                text=f"{member.mention} joined `{after.channel.name}`",
+                                text=f"{member.mention} `{member.id}` joined `{after.channel.name}`",
                                 color=discord.Color.magenta(),
                                 embed_links=embed_links,
                             )
@@ -292,7 +292,7 @@ class PublicRooms(commands.Cog):
     async def _send_log(channel: discord.TextChannel, text: str, color: discord.Color, embed_links: bool):
         if embed_links:
             return await channel.send(embed=discord.Embed(
-                timestamp=datetime.utcnow(),
+                # timestamp=datetime.utcnow(),
                 color=color,
                 description=text
             ))
