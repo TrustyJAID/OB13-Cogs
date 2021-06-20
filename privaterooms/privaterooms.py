@@ -87,7 +87,7 @@ class PrivateRooms(commands.Cog):
                         await self._send_log(
                             channel=log_channel,
                             text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
-                            color=discord.Color.magenta(),
+                            color=discord.Color.blurple(),
                             embed_links=embed_links,
                         )
 
@@ -182,7 +182,7 @@ class PrivateRooms(commands.Cog):
                                     await self._send_log(
                                         channel=log_channel,
                                         text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
-                                        color=discord.Color.dark_teal(),
+                                        color=discord.Color.magenta(),
                                         embed_links=embed_links,
                                     )
 
