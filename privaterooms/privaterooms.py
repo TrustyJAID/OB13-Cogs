@@ -228,7 +228,7 @@ class PrivateRooms(commands.Cog):
 
                         # If log channel set, then send logs
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                        if log_channel:
+                        if False:
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` joined {before.channel.mention} and created `{private_vc.name}`",
