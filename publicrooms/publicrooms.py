@@ -72,6 +72,7 @@ class PublicRooms(commands.Cog):
         leftroom = False
         joinedroom = False
         posted_logs = False
+        moved_rooms = False
 
         # Moved channels
         if before.channel and after.channel:
@@ -85,6 +86,7 @@ class PublicRooms(commands.Cog):
                     # Member joined an active PublicRoom
                     if before.channel.id != after.channel.id:
                         # only log if the channel changes nothing else.
+                        moved_rooms = True
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
                         if log_channel and not posted_logs:
                             await self._send_log(
@@ -126,13 +128,14 @@ class PublicRooms(commands.Cog):
                             else:
                                 return
                             log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                            if log_channel:
+                            if log_channel and (not posted_logs or moved_rooms):
                                 await self._send_log(
                                     channel=log_channel,
                                     text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
                                     color=discord.Color.red(),
                                     embed_links=embed_links,
                                 )
+                                posted_logs = True
                             break
 
                         # Member with custom channel name left
@@ -172,27 +175,29 @@ class PublicRooms(commands.Cog):
                                 return
 
                             log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                            if log_channel:
+                            if log_channel and (not posted_logs or moved_rooms):
                                 await self._send_log(
                                     channel=log_channel,
                                     text=f"{member.mention} `{member.id}` left `{before.channel.name}`, renamed to {public_vc.name}",
                                     color=discord.Color.magenta(),
                                     embed_links=embed_links,
                                 )
+                                posted_logs = True
 
                             break
 
                     # Log user leaving
                     log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                    if log_channel:
+                    if log_channel and not posted_logs:
                         await self._send_log(
                             channel=log_channel,
                             text=f"{member.mention} `{member.id}` left `{before.channel.name}`",
                             color=discord.Color.magenta(),
                             embed_links=embed_links,
                         )
+                        posted_logs = True
 
-                    break
+                        break
 
         # Joined a channel
         if (not before.channel and after.channel) or joinedroom:
@@ -257,13 +262,14 @@ class PublicRooms(commands.Cog):
 
                         # If log channel set, then send logs
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                        if log_channel:
+                        if log_channel and (not posted_logs or moved_rooms):
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` created `{public_vc.name}`",
                                 color=discord.Color.green(),
                                 embed_links=embed_links,
                             )
+                            posted_logs = True
 
                         # Add to active list
                         sys['active'].append((public_vc.id, num))
@@ -271,15 +277,16 @@ class PublicRooms(commands.Cog):
                         break
 
                     # Member joined an active PublicRoom
-                    elif sys['toggle'] and sys['log_channel']:
+                    else:
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                        if log_channel:
+                        if log_channel and (not posted_logs or moved_rooms):
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` joined `{after.channel.name}`",
                                 color=discord.Color.teal(),
                                 embed_links=embed_links,
                             )
+                            posted_logs = True
 
     @staticmethod
     async def _get_log(channel_id, guild: discord.Guild):
