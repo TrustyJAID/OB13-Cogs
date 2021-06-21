@@ -89,7 +89,7 @@ class PublicRooms(commands.Cog):
                         if log_channel and not posted_logs:
                             await self._send_log(
                                 channel=log_channel,
-                                text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
+                                text=f"{member.mention} `{member.id}` moved to `{after.channel.name}`",
                                 color=discord.Color.blurple(),
                                 embed_links=embed_links
                             )
@@ -130,7 +130,7 @@ class PublicRooms(commands.Cog):
                                 await self._send_log(
                                     channel=log_channel,
                                     text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
-                                    color=discord.Color.dark_teal(),
+                                    color=discord.Color.red(),
                                     embed_links=embed_links,
                                 )
                             break
@@ -176,7 +176,7 @@ class PublicRooms(commands.Cog):
                                 await self._send_log(
                                     channel=log_channel,
                                     text=f"{member.mention} `{member.id}` left `{before.channel.name}`, renamed to {public_vc.name}",
-                                    color=discord.Color.red(),
+                                    color=discord.Color.magenta(),
                                     embed_links=embed_links,
                                 )
 
@@ -261,7 +261,7 @@ class PublicRooms(commands.Cog):
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` created `{public_vc.name}`",
-                                color=discord.Color.teal(),
+                                color=discord.Color.green(),
                                 embed_links=embed_links,
                             )
 
@@ -277,7 +277,7 @@ class PublicRooms(commands.Cog):
                             await self._send_log(
                                 channel=log_channel,
                                 text=f"{member.mention} `{member.id}` joined `{after.channel.name}`",
-                                color=discord.Color.dark_teal(),
+                                color=discord.Color.teal(),
                                 embed_links=embed_links,
                             )
 
