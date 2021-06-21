@@ -182,17 +182,17 @@ class PublicRooms(commands.Cog):
 
                             break
 
-                        # Log user leaving
-                        log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
-                        if log_channel:
-                            await self._send_log(
-                                channel=log_channel,
-                                text=f"{member.mention} `{member.id}` left `{before.channel.name}`",
-                                color=discord.Color.magenta(),
-                                embed_links=embed_links,
-                            )
+                    # Log user leaving
+                    log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
+                    if log_channel:
+                        await self._send_log(
+                            channel=log_channel,
+                            text=f"{member.mention} `{member.id}` left `{before.channel.name}`",
+                            color=discord.Color.magenta(),
+                            embed_links=embed_links,
+                        )
 
-                        break
+                    break
 
         # Joined a channel
         if (not before.channel and after.channel) or joinedroom:
@@ -271,7 +271,7 @@ class PublicRooms(commands.Cog):
                         break
 
                     # Member joined an active PublicRoom
-                    elif sys['toggle'] and sys['log_channel'] and after.channel.id in [x[0] for x in sys['active']]:
+                    elif sys['toggle'] and sys['log_channel']:
                         log_channel, embed_links = await self._get_log(sys['log_channel'], member.guild)
                         if log_channel:
                             await self._send_log(
