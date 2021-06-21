@@ -86,7 +86,7 @@ class PrivateRooms(commands.Cog):
                     if log_channel and sys['lobby'] == before.channel.id and after.channel.id in active_vcs:
                         await self._send_log(
                             channel=log_channel,
-                            text=f"{member.mention} `{member.id}` moved from `{before.channel.name}` to `{after.channel.name}`",
+                            text=f"{member.mention} `{member.id}` moved to `{after.channel.name}`",
                             color=discord.Color.blurple(),
                             embed_links=embed_links,
                         )
@@ -156,7 +156,7 @@ class PrivateRooms(commands.Cog):
                                     await self._send_log(
                                         channel=log_channel,
                                         text=f"{member.mention} left `{before.channel.name}`, channel reassigned to {remaining.mention}",
-                                        color=discord.Color.teal(),
+                                        color=discord.Color.magenta(),
                                         embed_links=embed_links,
                                     )
 
@@ -182,7 +182,7 @@ class PrivateRooms(commands.Cog):
                                     await self._send_log(
                                         channel=log_channel,
                                         text=f"{member.mention} `{member.id}` left `{before.channel.name}`, channel removed",
-                                        color=discord.Color.magenta(),
+                                        color=discord.Color.red(),
                                         embed_links=embed_links,
                                     )
 
