@@ -198,16 +198,19 @@ class PrivateRooms(commands.Cog):
                         # Create their private VC
                         if not after.channel.category.permissions_for(member.guild.me).manage_channels:
                             return
+                        overwrites = after.channel.category.overwrites
+                        # ensure this keeps the categories existing overwrites as well as our own
+                        overwrites.update({
+                                member: discord.PermissionOverwrite(move_members=True, view_channel=True, connect=True),
+                                member.guild.default_role: discord.PermissionOverwrite(connect=False),
+                                member.guild.me: discord.PermissionOverwrite(connect=True)
+                            })
                         private_vc = await member.guild.create_voice_channel(
                             name=sys['channel_name'].replace("{creator}", member.display_name),
                             category=after.channel.category,
                             bitrate=min(sys['bitrate']*1000, member.guild.bitrate_limit),
                             reason=f"PrivateRooms: created by {member.display_name}",
-                            overwrites={
-                                member: discord.PermissionOverwrite(move_members=True, view_channel=True, connect=True),
-                                member.guild.default_role: discord.PermissionOverwrite(connect=False),
-                                member.guild.me: discord.PermissionOverwrite(connect=True)
-                            }
+                            overwrites=overwrites
                         )
 
                         # Move creator to their private room
